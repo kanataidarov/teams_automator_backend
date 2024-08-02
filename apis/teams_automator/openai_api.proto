@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package interview_automator;
+option go_package = "github.com/kanataidarov/teams_automator/pkg/grpc/teams_automator";
+
+service OpenAiApi {
+  rpc Transcribe(TranscribeRequest) returns (TranscribeResponse) {}
+}
+
+message TranscribeRequest {
+  FileHeader header = 1;
+  bytes data = 2;
+  bool is_debug = 3;
+}
+
+message FileHeader {
+  string name = 1;
+  int64 size = 2;
+}
+
+message TranscribeResponse {
+  string transcription = 1;
+}

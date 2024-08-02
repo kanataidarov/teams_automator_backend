@@ -1,7 +1,7 @@
 syntax = "proto3";
 
 package interview_automator;
-option go_package = "github.com/kanataidarov/teams_automator/pkg/grpc/teams_automator";
+option go_package = "github.com/kanataidarov/teams_automator/pkg/grpc";
 
 service OpenAiApi {
   rpc Transcribe(TranscribeRequest) returns (TranscribeResponse) {}

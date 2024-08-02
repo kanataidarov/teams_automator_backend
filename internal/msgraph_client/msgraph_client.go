@@ -5,7 +5,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"github.com/kanataidarov/tinkoff_voicekit/pkg/types"
+	"github.com/kanataidarov/teams_automator/config"
 	"io"
 	"log"
 	"net/http"
@@ -25,16 +25,13 @@ func ProfileUrl() string {
 	return fmt.Sprintf(`%s/me`, baseUrl)
 }
 
-func Get[T any](ctx context.Context, url string) (T, error) {
-	ctxVals := ctx.Value("values").(types.CtxVals)
-	cfg := ctxVals.Config
-	logger := ctxVals.Logger
+func Get[T any](ctx context.Context, cfg *config.Config, url string) (T, error) {
 
 	var x T
 
 	req, err := http.NewRequestWithContext(ctx, "GET", url, nil)
 	if err != nil {
-		logger.Error("Error creating Get request", "Error", err)
+		log.Printf("Error creating Get request. Error: %v", err)
 		return x, err
 	}
 	req.Header.Add("Authorization", "Bearer "+cfg.MsGraph.Token)
@@ -63,22 +60,18 @@ func parseJson[T any](s []byte) (T, error) {
 	return r, nil
 }
 
-func Post[T any](ctx context.Context, url string, data any) (T, error) {
-	ctxVals := ctx.Value("values").(types.CtxVals)
-	cfg := ctxVals.Config
-	logger := ctxVals.Logger
-
+func Post[T any](ctx context.Context, cfg *config.Config, url string, data any) (T, error) {
 	var x T
 
 	bts, err := toJson(data)
 	if err != nil {
-		logger.Error("Error marshalling json", "Error", err)
+		log.Printf("Error marshalling json. Error: %v", err)
 		return x, err
 	}
 
 	req, err := http.NewRequestWithContext(ctx, "POST", url, bytes.NewReader(bts))
 	if err != nil {
-		logger.Error("Error creating Post request", "Error", err)
+		log.Printf("Error creating Post request. Error: %v", err)
 		return x, err
 	}
 	req.Header.Add("Authorization", "Bearer "+cfg.MsGraph.Token)
@@ -86,14 +79,14 @@ func Post[T any](ctx context.Context, url string, data any) (T, error) {
 
 	res, err := http.DefaultClient.Do(req)
 	if err != nil {
-		logger.Error("Error executing Post request", "Error", err)
+		log.Printf("Error executing Post request. Error: %v", err)
 		return x, err
 	}
 
 	body, err := io.ReadAll(res.Body)
 	_ = res.Body.Close()
 	if err != nil {
-		logger.Error("Error reading response body", "Error", err)
+		log.Printf("Error reading response body. Error: %v", err)
 		return x, err
 	}
 

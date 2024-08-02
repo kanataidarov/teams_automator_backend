@@ -12,10 +12,10 @@ PROTOC_OPTS="-I./apis/ --go_out=temp --go-grpc_out=temp"
 mkdir -p temp/
 
 # shellcheck disable=SC2086
-protoc $PROTOC_OPTS ./apis/interview_automator/*.proto
+protoc $PROTOC_OPTS ./apis/teams_automator/*.proto
 
-rm -rf pkg/interview_automator
+rm -rf pkg/grpc/
 
-mv temp/github.com/kanataidarov/interview_automator/pkg/* pkg
+mv temp/github.com/kanataidarov/teams_automator/pkg/* pkg
 
 rm -rf temp/

@@ -1,7 +1,7 @@
 package types
 
 import (
-	"github.com/kanataidarov/tinkoff_voicekit/internal/config"
+	"github.com/kanataidarov/teams_automator/config"
 	"log/slog"
 )
 
